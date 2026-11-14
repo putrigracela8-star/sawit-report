@@ -1,0 +1,15 @@
+{
+  "buildCommand": "npm run build",
+  "installCommand": "npm install",
+  "functions": {
+    "src/app/admin/companies/page.tsx": {
+      "maxDuration": 60
+    }
+  },
+  "crons": [
+    {
+      "path": "/api/cron/merged?token=@CRON_TOKEN",
+      "schedule": "0 8 * * *"
+    }
+  ]
+}

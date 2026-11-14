@@ -1,0 +1,571 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  ASISTEN
+  MANDOR
+  KERANI
+  MANAGEMENT
+}
+
+enum Paket {
+  GRATIS
+  BASIC
+  PREMIUM
+}
+
+enum PinKind {
+  MASTER
+  INPUT
+  REPORT
+}
+
+enum JenisPekerja {
+  TETAP
+  HARIAN
+  BORONGAN
+}
+
+enum TipeTransaksiGudang {
+  MASUK
+  KELUAR
+}
+
+enum PayrollStatus {
+  DRAFT
+  LOCKED
+}
+
+enum PayrollAdjustmentType {
+  BONUS
+  POTONGAN
+}
+
+model Company {
+  id        String    @id @default(cuid())
+  nama      String
+  email     String?
+  phone     String?
+  logo      String?
+  deskripsi String?
+  tagline   String?
+  tahunBerdiri Int?
+  alamat    String?
+  kota      String?
+  provinsi  String?
+  jamOperasional String?
+  whatsapp  String?
+  facebook  String?
+  instagram String?
+  youtube   String?
+  tiktok    String?
+  paket     Paket     @default(GRATIS)
+  aktif     Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  users       User[]
+  kebun       Kebun[]
+  barang      Barang[]
+  pekerja     Pekerja[]
+  workCalendars WorkCalendar[]
+  auditLogs   AuditLog[]
+  emailLogs   EmailLog[]
+  schedule    LaporanSchedule?
+  payrollPeriodes PayrollPeriode[]
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String?
+  passwordHash String
+  pinHash      String?
+  role         Role     @default(ADMIN)
+  isSuperAdmin Boolean  @default(false)
+  confirmed    Boolean  @default(false)
+  confirmToken String?  @unique
+  confirmCode  String?
+  companyId    String
+  company      Company  @relation(fields: [companyId], references: [id])
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model AppPin {
+  id        String   @id @default(cuid())
+  kind      PinKind  @unique
+  pinHash   String
+  updatedAt DateTime @updatedAt
+}
+
+model PinAccess {
+  id        String   @id @default(cuid())
+  kind      PinKind
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([kind])
+  @@index([expiresAt])
+}
+
+model OtpReset {
+  id        String   @id @default(cuid())
+  email     String
+  token     String   @unique
+  type      String   @default("PIN_MASTER")
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([email])
+  @@index([expiresAt])
+}
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  actorUserId String?
+  actorEmail  String?
+  action      String
+  entity      String
+  entityId    String?
+  meta        Json?
+  companyId   String
+  company     Company  @relation(fields: [companyId], references: [id])
+  createdAt   DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([entity])
+  @@index([companyId])
+}
+
+model WorkCalendar {
+  id        String   @id @default(cuid())
+  companyId String
+  company   Company  @relation(fields: [companyId], references: [id])
+  tanggal   DateTime
+  isWorking Boolean  @default(true)
+  note      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([companyId, tanggal])
+  @@index([tanggal])
+}
+
+model Kebun {
+  id        String     @id @default(cuid())
+  companyId String
+  company   Company    @relation(fields: [companyId], references: [id])
+  kode      String
+  nama      String
+  lokasi    String?
+  afdeling  Afdeling[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@unique([companyId, kode])
+}
+
+model Afdeling {
+  id        String   @id @default(cuid())
+  kebunId   String
+  kebun     Kebun    @relation(fields: [kebunId], references: [id], onDelete: Cascade)
+  kode      String
+  nama      String
+  blok      Blok[]
+  pekerja   Pekerja[]
+  absensi   AbsensiHarian[]
+  penugasan Penugasan[]
+  payrollPeriode PayrollPeriode[]
+  budgetProduksi BudgetProduksiBulanan[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([kebunId, kode])
+}
+
+model BudgetProduksiBulanan {
+  id         String   @id @default(cuid())
+  afdelingId String
+  afdeling   Afdeling @relation(fields: [afdelingId], references: [id], onDelete: Cascade)
+  tahun      Int
+  bulan      Int
+  targetTon  Decimal  @db.Decimal(12, 2)
+  budgetBiayaPanen     Decimal? @db.Decimal(14, 2)
+  budgetBiayaPerawatan Decimal? @db.Decimal(14, 2)
+  budgetBiayaPemupukan Decimal? @db.Decimal(14, 2)
+  budgetBiayaLain      Decimal? @db.Decimal(14, 2)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([afdelingId, tahun, bulan])
+  @@index([tahun, bulan])
+}
+
+model Blok {
+  id         String   @id @default(cuid())
+  afdelingId String
+  afdeling   Afdeling @relation(fields: [afdelingId], references: [id], onDelete: Cascade)
+  kode       String
+  nama       String
+  luasHa     Decimal? @db.Decimal(10, 2)
+  tahunTanam Int?
+  penugasan  Penugasan[]
+  panen      PanenBlok[]
+  perawatan  PerawatanBlok[]
+  pemupukan  PemupukanBlok[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([afdelingId, kode])
+}
+
+model Jabatan {
+  id        String    @id @default(cuid())
+  kode      String    @unique
+  nama      String
+  pekerja   Pekerja[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Kegiatan {
+  id        String   @id @default(cuid())
+  kode      String   @unique
+  nama      String
+  kategori  String?
+  penugasan Penugasan[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model KegiatanPerawatan {
+  id        String          @id @default(cuid())
+  kode      String          @unique
+  nama      String
+  kategori  String?
+  perawatan PerawatanBlok[]
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+}
+
+model JenisPupuk {
+  id         String         @id @default(cuid())
+  kode       String         @unique
+  nama       String
+  pemupukan  PemupukanBlok[]
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+}
+
+model Pekerja {
+  id        String       @id @default(cuid())
+  companyId String
+  company   Company      @relation(fields: [companyId], references: [id])
+  nik       String?
+  nama      String
+  jenis     JenisPekerja @default(HARIAN)
+  aktif     Boolean      @default(true)
+
+  jabatanId String?
+  jabatan   Jabatan?     @relation(fields: [jabatanId], references: [id], onDelete: SetNull)
+
+  afdelingId String?
+  afdeling   Afdeling?   @relation(fields: [afdelingId], references: [id], onDelete: SetNull)
+
+  absensiItem AbsensiItem[]
+  penugasan   Penugasan[]
+  payrollSlip PayrollSlip[]
+  payrollAdjustment PayrollAdjustment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([companyId, nik])
+}
+
+model AbsensiHarian {
+  id         String       @id @default(cuid())
+  tanggal    DateTime
+  afdelingId String?
+  afdeling   Afdeling?    @relation(fields: [afdelingId], references: [id], onDelete: SetNull)
+  items      AbsensiItem[]
+  catatan    String?
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+
+  @@unique([tanggal, afdelingId])
+}
+
+model AbsensiItem {
+  id         String        @id @default(cuid())
+  absensiId  String
+  absensi    AbsensiHarian @relation(fields: [absensiId], references: [id], onDelete: Cascade)
+  pekerjaId  String
+  pekerja    Pekerja       @relation(fields: [pekerjaId], references: [id], onDelete: Cascade)
+  hadir      Boolean       @default(false)
+  jamKerja   Decimal?      @db.Decimal(6, 2)
+  catatan    String?
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+
+  @@unique([absensiId, pekerjaId])
+}
+
+model Penugasan {
+  id         String   @id @default(cuid())
+  tanggal    DateTime
+
+  pekerjaId  String
+  pekerja    Pekerja   @relation(fields: [pekerjaId], references: [id], onDelete: Cascade)
+
+  kegiatanId String
+  kegiatan   Kegiatan  @relation(fields: [kegiatanId], references: [id], onDelete: Cascade)
+
+  afdelingId String?
+  afdeling   Afdeling? @relation(fields: [afdelingId], references: [id], onDelete: SetNull)
+
+  blokId     String?
+  blok       Blok?     @relation(fields: [blokId], references: [id], onDelete: SetNull)
+
+  realisasi  PenugasanRealisasi?
+  catatan    String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([tanggal])
+  @@index([pekerjaId])
+}
+
+model PenugasanRealisasi {
+  id         String   @id @default(cuid())
+  penugasanId String  @unique
+  penugasan  Penugasan @relation(fields: [penugasanId], references: [id], onDelete: Cascade)
+
+  jjg         Int      @default(0)
+  brondolanKg Decimal? @db.Decimal(12, 2)
+  catatan     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PanenBlok {
+  id           String   @id @default(cuid())
+  tanggal      DateTime
+  blokId       String
+  blok         Blok     @relation(fields: [blokId], references: [id], onDelete: Cascade)
+  jjg          Int      @default(0)
+  tonaseKg     Decimal? @db.Decimal(12, 2)
+  brondolanKg  Decimal? @db.Decimal(12, 2)
+  biaya        Decimal? @db.Decimal(14, 2)
+  catatan      String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([tanggal, blokId], name: "tanggal_blokId")
+  @@index([tanggal])
+}
+
+model PerawatanBlok {
+  id        String   @id @default(cuid())
+  tanggal   DateTime
+  blokId    String
+  blok      Blok     @relation(fields: [blokId], references: [id], onDelete: Cascade)
+  kegiatanText String? @map("kegiatan")
+  kegiatanId String?
+  kegiatan   KegiatanPerawatan? @relation(fields: [kegiatanId], references: [id], onDelete: SetNull)
+  volume    Decimal? @db.Decimal(12, 2)
+  satuan    String?
+  biaya     Decimal? @db.Decimal(14, 2)
+  catatan   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([tanggal, blokId], name: "tanggal_blokId_perawatan")
+  @@index([tanggal])
+}
+
+model PemupukanBlok {
+  id         String   @id @default(cuid())
+  tanggal    DateTime
+  blokId     String
+  blok       Blok     @relation(fields: [blokId], references: [id], onDelete: Cascade)
+  jenisPupukText String? @map("jenisPupuk")
+  jenisPupukId String?
+  jenisPupuk   JenisPupuk? @relation(fields: [jenisPupukId], references: [id], onDelete: SetNull)
+  dosisKgHa  Decimal? @db.Decimal(12, 2)
+  totalKg    Decimal? @db.Decimal(12, 2)
+  biaya      Decimal? @db.Decimal(14, 2)
+  catatan    String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([tanggal, blokId], name: "tanggal_blokId_pemupukan")
+  @@index([tanggal])
+}
+
+model Barang {
+  id          String            @id @default(cuid())
+  companyId   String
+  company     Company           @relation(fields: [companyId], references: [id])
+  kode        String
+  nama        String
+  kategori    String?
+  satuan      String            @default("kg")
+  stokMin     Decimal?          @db.Decimal(12, 2)
+  hargaSatuan Decimal?          @db.Decimal(14, 2)
+  aktif       Boolean           @default(true)
+  transaksi   TransaksiGudang[]
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@unique([companyId, kode])
+}
+
+model TransaksiGudang {
+  id        String             @id @default(cuid())
+  tanggal   DateTime
+  tipe      TipeTransaksiGudang
+  barangId  String
+  barang    Barang             @relation(fields: [barangId], references: [id], onDelete: Cascade)
+  qty       Decimal            @db.Decimal(12, 2)
+  biaya     Decimal?           @db.Decimal(14, 2)
+  referensi String?
+  catatan   String?
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+
+  @@index([barangId])
+}
+
+model PayrollTarifGlobal {
+  id String @id @default(cuid())
+  key String @unique
+
+  upahPerJam         Decimal @db.Decimal(12, 2)
+  tarifPanenPerJjg   Decimal @db.Decimal(12, 2)
+  tarifPanenBrondolan Decimal @db.Decimal(12, 2)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PayrollPeriode {
+  id        String       @id @default(cuid())
+  fromDate  DateTime
+  toDate    DateTime
+  status    PayrollStatus @default(DRAFT)
+
+  afdelingId String?
+  afdeling   Afdeling?   @relation(fields: [afdelingId], references: [id], onDelete: SetNull)
+
+  companyId String
+  company   Company  @relation(fields: [companyId], references: [id])
+
+  slips      PayrollSlip[]
+  adjustments PayrollAdjustment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([fromDate])
+  @@index([toDate])
+  @@index([afdelingId])
+  @@index([companyId])
+  @@unique([fromDate, toDate, afdelingId])
+}
+
+model PayrollSlip {
+  id        String        @id @default(cuid())
+  periodeId String
+  periode   PayrollPeriode @relation(fields: [periodeId], references: [id], onDelete: Cascade)
+
+  pekerjaId String
+  pekerja   Pekerja       @relation(fields: [pekerjaId], references: [id], onDelete: Cascade)
+
+  totalHarian   Decimal @db.Decimal(14, 2)
+  totalBorongan Decimal @db.Decimal(14, 2)
+  totalBonus    Decimal @db.Decimal(14, 2)
+  totalPotongan Decimal @db.Decimal(14, 2)
+  grandTotal    Decimal @db.Decimal(14, 2)
+
+  lines PayrollSlipLine[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([periodeId])
+  @@index([pekerjaId])
+  @@unique([periodeId, pekerjaId])
+}
+
+model PayrollSlipLine {
+  id      String      @id @default(cuid())
+  slipId  String
+  slip    PayrollSlip @relation(fields: [slipId], references: [id], onDelete: Cascade)
+
+  label  String
+  qty    Decimal? @db.Decimal(14, 2)
+  rate   Decimal? @db.Decimal(14, 2)
+  amount Decimal  @db.Decimal(14, 2)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([slipId])
+}
+
+model LaporanSchedule {
+  companyId    String    @id
+  company      Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  aktif        Boolean   @default(true)
+  kirimHari    Int       @default(5)
+  kirimJam     Int       @default(8)
+  penerima     String    @default("")
+  periodeBulan Int?
+  periodeTahun Int?
+  terakhirKirim DateTime?
+  updatedAt    DateTime  @updatedAt
+}
+
+model EmailLog {
+  id        String   @id @default(cuid())
+  tujuan    String
+  subjek    String
+  status    String
+  error     String?
+  companyId String?
+  company   Company? @relation(fields: [companyId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@index([companyId])
+}
+
+model PayrollAdjustment {
+  id        String                @id @default(cuid())
+  periodeId String
+  periode   PayrollPeriode        @relation(fields: [periodeId], references: [id], onDelete: Cascade)
+
+  pekerjaId String
+  pekerja   Pekerja               @relation(fields: [pekerjaId], references: [id], onDelete: Cascade)
+
+  type      PayrollAdjustmentType
+  amount    Decimal @db.Decimal(14, 2)
+  note      String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([periodeId])
+  @@index([pekerjaId])
+}

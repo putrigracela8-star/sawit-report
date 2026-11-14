@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manual Book SawitReport</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', -apple-system, sans-serif; color: #18181b; background: #fff; line-height: 1.6; }
+  .container { max-width: 800px; margin: 0 auto; padding: 40px 24px; }
+
+  .cover { text-align: center; padding: 80px 0 60px; border-bottom: 3px solid #059669; margin-bottom: 40px; }
+  .cover h1 { font-size: 36px; color: #059669; margin-bottom: 8px; }
+  .cover .sub { font-size: 18px; color: #52525b; margin-bottom: 4px; }
+  .cover .ver { font-size: 14px; color: #a1a1aa; }
+  .cover .logo { font-size: 14px; color: #059669; font-weight: 600; letter-spacing: 2px; margin-bottom: 20px; }
+
+  .toc { background: #fafafa; border: 1px solid #e4e4e7; border-radius: 12px; padding: 24px; margin-bottom: 40px; }
+  .toc h2 { font-size: 16px; margin-bottom: 12px; color: #059669; }
+  .toc ol { padding-left: 20px; }
+  .toc li { margin-bottom: 4px; }
+  .toc a { color: #18181b; text-decoration: none; font-size: 14px; }
+  .toc a:hover { color: #059669; }
+
+  .chapter { margin-bottom: 48px; }
+  .chapter h2 { font-size: 24px; color: #059669; border-bottom: 2px solid #d1fae5; padding-bottom: 8px; margin-bottom: 20px; padding-top: 20px; }
+  .chapter h3 { font-size: 18px; margin: 20px 0 10px; color: #18181b; }
+  .chapter h4 { font-size: 15px; margin: 16px 0 8px; color: #52525b; }
+  .chapter p { margin-bottom: 10px; font-size: 14px; }
+  .chapter ul, .chapter ol { padding-left: 20px; margin-bottom: 12px; font-size: 14px; }
+  .chapter li { margin-bottom: 4px; }
+  .chapter table { width: 100%; border-collapse: collapse; margin: 12px 0 16px; font-size: 13px; }
+  .chapter th { background: #059669; color: #fff; padding: 8px 12px; text-align: left; font-weight: 600; }
+  .chapter td { padding: 8px 12px; border-bottom: 1px solid #e4e4e7; }
+  .chapter tr:nth-child(even) td { background: #fafafa; }
+  .chapter code { background: #f1f1f1; padding: 2px 6px; border-radius: 4px; font-size: 13px; }
+  .chapter strong { font-weight: 600; }
+
+  .footer { text-align: center; padding: 40px 0 20px; border-top: 1px solid #e4e4e7; color: #a1a1aa; font-size: 13px; }
+
+  .page-break { page-break-before: always; }
+
+  @media print {
+    body { font-size: 12px; }
+    .container { max-width: 100%; padding: 0; }
+    .cover { padding: 60px 0 40px; }
+    .chapter table { font-size: 11px; }
+    .toc { break-after: page; }
+    .chapter h2 { page-break-before: always; }
+    .chapter h2:first-of-type { page-break-before: avoid; }
+    @page { margin: 2cm; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="cover">
+  <div class="logo">SAWITREPORT</div>
+  <h1>Manual Book</h1>
+  <div class="sub">Sistem Informasi Manajemen Perkebunan Kelapa Sawit</div>
+  <div class="ver">Versi 1.0 — Juli 2026</div>
+</div>
+
+<div class="toc">
+<h2>Daftar Isi</h2>
+<ol>
+  <li><a href="#ch1">Pendahuluan</a></li>
+  <li><a href="#ch2">Registrasi &amp; Login</a></li>
+  <li><a href="#ch3">Dashboard</a></li>
+  <li><a href="#ch4">Master Data</a></li>
+  <li><a href="#ch5">Operasional Harian</a></li>
+  <li><a href="#ch6">Manajemen User &amp; PIN</a></li>
+  <li><a href="#ch7">Payroll</a></li>
+  <li><a href="#ch8">Budget &amp; Biaya</a></li>
+  <li><a href="#ch9">Laporan &amp; Export</a></li>
+  <li><a href="#ch10">Laporan Otomatis (Email)</a></li>
+  <li><a href="#ch11">Backup &amp; Restore</a></li>
+  <li><a href="#ch12">Fitur Tambahan</a></li>
+  <li><a href="#ch13">Panel Admin (Super Admin)</a></li>
+  <li><a href="#ch14">Pemecahan Masalah</a></li>
+</ol>
+</div>
+
+<div class="chapter" id="ch1">
+<h2>1. Pendahuluan</h2>
+
+<h3>1.1 Tentang SawitReport</h3>
+<p>SawitReport adalah sistem informasi manajemen perkebunan kelapa sawit berbasis web yang membantu operasional harian kebun, manajemen pekerja, gudang &amp; logistik, serta dashboard KPI per afdeling. Dirancang untuk alur kerja mandor, kerani, asisten, dan manajemen.</p>
+
+<h3>1.2 Persyaratan Sistem</h3>
+<table>
+<tr><th>Perangkat</th><th>Keterangan</th></tr>
+<tr><td>Browser</td><td>Chrome 90+, Firefox 90+, Edge 90+, Safari 14+</td></tr>
+<tr><td>HP/Tablet</td><td>Chrome Android, Safari iOS</td></tr>
+<tr><td>Internet</td><td>Koneksi stabil (min 1 Mbps)</td></tr>
+</table>
+
+<h3>1.3 Paket &amp; Harga</h3>
+<table>
+<tr><th>Fitur</th><th>GRATIS</th><th>BASIC</th><th>PREMIUM</th></tr>
+<tr><td>Harga</td><td>Rp 0</td><td>Rp 200.000/bln</td><td>Rp 400.000/bln</td></tr>
+<tr><td>Kebun</td><td>1</td><td>3</td><td>∞</td></tr>
+<tr><td>User</td><td>3</td><td>5</td><td>∞</td></tr>
+<tr><td>Pekerja</td><td>20</td><td>100</td><td>∞</td></tr>
+<tr><td>Histori Data</td><td>3 bln</td><td>12 bln</td><td>∞</td></tr>
+<tr><td>Payroll</td><td>✗</td><td>✗</td><td>✓</td></tr>
+<tr><td>Lap. Otomatis</td><td>✗</td><td>✓</td><td>✓</td></tr>
+<tr><td>Deteksi Anomali</td><td>✗</td><td>✗</td><td>✓</td></tr>
+</table>
+
+<h3>1.4 Daftar Istilah</h3>
+<table>
+<tr><th>Istilah</th><th>Arti</th></tr>
+<tr><td>Kebun</td><td>Unit perkebunan (Estate)</td></tr>
+<tr><td>Afdeling</td><td>Divisi dalam kebun (Division)</td></tr>
+<tr><td>Blok</td><td>Petak lahan dalam afdeling (Block)</td></tr>
+<tr><td>JJG</td><td>Janjang (fruit bunch)</td></tr>
+<tr><td>Brondolan</td><td>Buah lepas (loose fruit)</td></tr>
+<tr><td>MA-7</td><td>Moving Average 7 hari</td></tr>
+</table>
+</div>
+
+<div class="chapter page-break" id="ch2">
+<h2>2. Registrasi &amp; Login</h2>
+
+<h3>2.1 Membuat Akun Baru</h3>
+<ol>
+  <li>Buka <strong>https://sawitreport.online</strong></li>
+  <li>Klik tombol <strong>"Daftar Gratis"</strong> pada paket GRATIS</li>
+  <li>Isi form pendaftaran: Nama Perusahaan, Nama Lengkap, Email, No. Telepon, Password (min 8 karakter)</li>
+  <li>Klik <strong>"Daftar"</strong></li>
+  <li>Sistem akan otomatis login ke Dashboard</li>
+</ol>
+
+<h3>2.2 Login</h3>
+<ol>
+  <li>Buka <strong>https://sawitreport.online</strong></li>
+  <li>Klik <strong>"Masuk"</strong> di pojok kanan atas</li>
+  <li>Masukkan <strong>Email</strong> dan <strong>Password</strong></li>
+  <li>Klik <strong>"Login"</strong></li>
+</ol>
+
+<h3>2.3 Lupa / Reset PIN</h3>
+<ol>
+  <li>Pada halaman Masukkan PIN, klik link <strong>"Lupa PIN?"</strong></li>
+  <li>Masukkan <strong>email terdaftar</strong></li>
+  <li>Cek inbox email untuk link reset (berlaku 30 menit)</li>
+  <li>Klik link, masukkan <strong>PIN baru</strong> (4-12 digit)</li>
+  <li>Klik <strong>"Reset PIN"</strong></li>
+</ol>
+</div>
+
+<div class="chapter page-break" id="ch3">
+<h2>3. Dashboard</h2>
+
+<p>Dashboard adalah halaman utama setelah login yang menampilkan ringkasan KPI.</p>
+
+<h3>3.1 Kartu Ringkasan</h3>
+<ul>
+  <li><strong>Panen Hari Ini</strong> — Total JJG, tonase (kg), brondolan (kg)</li>
+  <li><strong>Kehadiran</strong> — Jumlah hadir / tidak hadir hari ini</li>
+  <li><strong>Stok Kritis</strong> — Barang dengan stok di bawah minimum</li>
+  <li><strong>MTD / YTD / MoM</strong> — Produksi bulan ini, tahun ini, dan perbandingan bulan lalu</li>
+</ul>
+
+<h3>3.2 Filter Lokasi</h3>
+<p>Gunakan dropdown Kebun dan Afdeling untuk menyaring data.</p>
+
+<h3>3.3 Alert</h3>
+<ul>
+  <li><strong>Achievement Rendah</strong> — Kebun/afdeling dengan capaian &lt; 90%</li>
+  <li><strong>Gap Terbesar</strong> — Selisih real vs target terbesar (negatif)</li>
+  <li><strong>Anomali MA-7</strong> — Blok dengan penurunan &gt; 50% dari rata-rata 7 hari (PREMIUM)</li>
+  <li><strong>Stok Kritis</strong> — Barang dengan stok di bawah minimum</li>
+</ul>
+
+<h3>3.4 Grafik Produksi Bulanan</h3>
+<p>Grafik batang realisasi produksi vs target per bulan sepanjang tahun.</p>
+</div>
+
+<div class="chapter page-break" id="ch4">
+<h2>4. Master Data</h2>
+<p><strong>Akses:</strong> ADMIN — membutuhkan PIN MASTER.</p>
+
+<h3>4.1 Kebun</h3>
+<p><strong>Tambah:</strong> Kode (unik) + Nama + Lokasi (opsional) → klik "Tambah"</p>
+
+<h3>4.2 Afdeling</h3>
+<p><strong>Tambah:</strong> Pilih Kebun + Kode (unik per kebun) + Nama → klik "Tambah"</p>
+
+<h3>4.3 Blok</h3>
+<p><strong>Tambah:</strong> Pilih Afdeling + Kode + Nama + Luas (ha) + Tahun Tanam → klik "Tambah"</p>
+<p>Ditampilkan dalam struktur: Kebun → Afdeling → Blok</p>
+
+<h3>4.4 Jabatan / Regu</h3>
+<p>Kode unik + Nama jabatan.</p>
+
+<h3>4.5 Kegiatan / Pekerjaan</h3>
+<p>Digunakan untuk penugasan absensi. Kode unik + Nama + Kategori (opsional).</p>
+
+<h3>4.6 Kegiatan Perawatan</h3>
+<p>Digunakan untuk modul perawatan. Kode unik + Nama + Kategori (opsional).</p>
+
+<h3>4.7 Jenis Pupuk</h3>
+<p>Kode unik + Nama.</p>
+
+<h3>4.8 Pekerja / Karyawan</h3>
+<p><strong>Tambah:</strong> NIK (opsional, unik) + Nama + Jenis (TETAP/HARIAN/BORONGAN) + Jabatan (opsional) + Afdeling (opsional) → klik "Tambah"</p>
+<p>Pagination: 50 per halaman.</p>
+
+<h3>4.9 Budget Produksi Bulanan</h3>
+<p><strong>Tambah:</strong> Pilih Afdeling + Tahun + Bulan (angka 1-12) + Target (ton) + Budget Biaya (opsional) → klik "Simpan"</p>
+
+<h3>4.10 Kalender Kerja</h3>
+<p>Override hari kerja/libur. Default: Senin-Sabtu kerja, Minggu libur.</p>
+
+<h3>4.11 Import Data Excel</h3>
+<p><strong>Akses:</strong> Menu Import Data di sidebar.</p>
+<p><strong>Format:</strong> File .xlsx dengan kolom sesuai tipe data (pekerja, barang, budget). Lihat format detail di halaman Import Data.</p>
+</div>
+
+<div class="chapter page-break" id="ch5">
+<h2>5. Operasional Harian</h2>
+
+<h3>5.1 Panen</h3>
+<p><strong>Akses:</strong> Menu Operasional Panen — PIN INPUT.</p>
+<ol>
+  <li>Pilih Tanggal dan Afdeling → klik "Tampilkan"</li>
+  <li>Isi JJG, Tonase (kg), Brondolan (kg), Biaya (opsional), Catatan (opsional)</li>
+  <li>Klik "Simpan" per baris</li>
+</ol>
+
+<h3>5.2 Perawatan</h3>
+<p><strong>Akses:</strong> Menu Operasional Perawatan — PIN INPUT.</p>
+<ol>
+  <li>Pilih Tanggal dan Afdeling → klik "Tampilkan"</li>
+  <li>Pilih Kegiatan, Volume, Satuan, Biaya (opsional), Catatan (opsional)</li>
+  <li>Klik "Simpan"</li>
+</ol>
+
+<h3>5.3 Pemupukan</h3>
+<p><strong>Akses:</strong> Menu Operasional Pemupukan — PIN INPUT.</p>
+<ol>
+  <li>Pilih Tanggal dan Afdeling → klik "Tampilkan"</li>
+  <li>Pilih Jenis Pupuk, Dosis (kg/ha), Total (kg), Biaya (opsional), Catatan (opsional)</li>
+  <li>Klik "Simpan"</li>
+</ol>
+
+<h3>5.4 Absensi &amp; Penugasan</h3>
+<p><strong>Akses:</strong> Menu Absensi &amp; Penugasan — PIN INPUT.</p>
+<p><strong>Absensi:</strong> Pilih Tanggal + Afdeling → "Buat absensi" → "Tarik pekerja (auto)" → Atur Hadir/Tidak + Jam Kerja</p>
+<p><strong>Penugasan:</strong> Pilih Pekerja + Kegiatan + Blok (opsional) + Catatan → "Tambah penugasan" → Isi realisasi JJG/Brondolan → "Simpan"</p>
+
+<h3>5.5 Gudang &amp; Logistik</h3>
+<p><strong>Akses:</strong> Menu Gudang &amp; Logistik — PIN INPUT.</p>
+<p><strong>Master Barang:</strong> Kode + Nama + Kategori + Satuan + Stok Min + Harga Satuan → "Tambah barang"</p>
+<p><strong>Transaksi:</strong> Tanggal + Tipe (MASUK/KELUAR) + Barang + Qty + Biaya (opsional) + Referensi + Catatan → "Simpan"</p>
+<p>Stok kritis ditandai merah. Badge stok kritis muncul di sidebar.</p>
+</div>
+
+<div class="chapter page-break" id="ch6">
+<h2>6. Manajemen User &amp; PIN</h2>
+
+<h3>6.1 Role &amp; Hak Akses</h3>
+<table>
+<tr><th>Role</th><th>Akses</th></tr>
+<tr><td>ADMIN</td><td>Semua akses</td></tr>
+<tr><td>ASISTEN</td><td>Laporan &amp; export, payroll, budget</td></tr>
+<tr><td>MANAGEMENT</td><td>Laporan &amp; export, dashboard</td></tr>
+<tr><td>MANDOR</td><td>Input operasional</td></tr>
+<tr><td>KERANI</td><td>Input operasional</td></tr>
+</table>
+
+<h3>6.2 Tambah User</h3>
+<p><strong>Akses:</strong> Manajemen User — PIN MASTER.</p>
+<p>Email + Nama + Password (min 8) + Role → "Buat User"</p>
+
+<h3>6.3 Pengaturan PIN</h3>
+<table>
+<tr><th>PIN</th><th>Digunakan Untuk</th></tr>
+<tr><td>MASTER</td><td>Master Data, User, Backup, Pengaturan</td></tr>
+<tr><td>INPUT</td><td>Input operasional (panen, perawatan, pemupukan, absensi, gudang)</td></tr>
+<tr><td>REPORT</td><td>Laporan, Export, Payroll</td></tr>
+</table>
+<p>Password login + Master Key (jika bukan Super Admin) + PIN Baru (4-12 digit) → "Simpan"</p>
+</div>
+
+<div class="chapter page-break" id="ch7">
+<h2>7. Payroll</h2>
+<p><strong>Akses:</strong> Menu Payroll — PREMIUM — PIN REPORT.</p>
+
+<h3>7.1 Set Tarif Global</h3>
+<p>Masukkan Upah/Jam, Tarif JJG, Tarif Brondolan → "Simpan Tarif"</p>
+
+<h3>7.2 Generate Payroll</h3>
+<ol>
+  <li>Buat Periode (from + to date + afdeling)</li>
+  <li>Klik "Generate Payroll" pada periode DRAFT</li>
+  <li>Sistem menghitung: Upah Harian + Upah Borongan + Bonus - Potongan = Grand Total</li>
+</ol>
+
+<h3>7.3 Lock Periode</h3>
+<p>Klik "Lock" untuk finalisasi. Periode LOCKED tidak bisa digenerate ulang.</p>
+
+<h3>7.4 Export</h3>
+<ul>
+  <li>Rekap CSV</li>
+  <li>All Slip ZIP (PDF per pekerja)</li>
+  <li>Slip PDF (per pekerja)</li>
+</ul>
+</div>
+
+<div class="chapter page-break" id="ch8">
+<h2>8. Budget &amp; Biaya</h2>
+
+<h3>8.1 Set Budget Biaya</h3>
+<p>Di Master Data → Budget Produksi Bulanan, isi Budget Panen, Perawatan, Pemupukan, Lain (Rp).</p>
+
+<h3>8.2 Halaman Budget vs Real Cost</h3>
+<p><strong>Akses:</strong> Menu Budget vs Real Cost — PIN REPORT.</p>
+<p>Tahun + Bulan (opsional) + Afdeling (opsional).</p>
+<p>Menampilkan: kartu ringkasan, grafik horizontal, tabel detail per afdeling dengan warna hijau/merah.</p>
+<p>Data real cost dari: biaya panen, perawatan, pemupukan, transaksi gudang KELUAR.</p>
+</div>
+
+<div class="chapter page-break" id="ch9">
+<h2>9. Laporan &amp; Export</h2>
+<p><strong>Akses:</strong> Menu Rekap &amp; Export — PIN REPORT.</p>
+
+<h3>9.1 Filter &amp; Download</h3>
+<p>Filter: From date + To date + Kebun + Afdeling + Blok → "Terapkan"</p>
+<p><strong>Download PDF:</strong> Laporan 7 halaman lengkap (cover, ringkasan, produksi harian, panen per afdeling, perawatan &amp; pemupukan, absensi &amp; gudang, ranking, tanda tangan).</p>
+<p><strong>Download CSV:</strong> Panen, Perawatan, Pemupukan, Absensi, Gudang.</p>
+</div>
+
+<div class="chapter page-break" id="ch10">
+<h2>10. Laporan Otomatis (Email)</h2>
+<p><strong>Akses:</strong> Menu Laporan Otomatis — BASIC/PREMIUM — PIN MASTER.</p>
+
+<h3>10.1 Atur Jadwal</h3>
+<p>Aktif + Tanggal Kirim + Jam Kirim + Email Penerima (pisahkan koma) → "Simpan"</p>
+
+<h3>10.2 Kirim Manual &amp; Riwayat</h3>
+<p>Klik "Kirim Sekarang" untuk kirim langsung.</p>
+<p>Menu Riwayat Email: lihat log 20 pengiriman terakhir + "Kirim Ulang".</p>
+</div>
+
+<div class="chapter page-break" id="ch11">
+<h2>11. Backup &amp; Restore</h2>
+<p><strong>Akses:</strong> Menu Backup Data — BASIC/PREMIUM — PIN MASTER.</p>
+
+<h3>11.1 Download</h3>
+<ul>
+  <li><strong>ZIP Backup</strong> — format JSON untuk restore</li>
+  <li><strong>Excel</strong> — format spreadsheet untuk dibaca</li>
+</ul>
+
+<h3>11.2 Restore</h3>
+<p>Upload file ZIP → "Restore dari ZIP" → sistem upsert data (tidak hapus data existing).</p>
+</div>
+
+<div class="chapter page-break" id="ch12">
+<h2>12. Fitur Tambahan</h2>
+
+<h3>12.1 Peta Blok Interaktif</h3>
+<p>Grid kartu blok dengan warna: Hijau (aktif), Kuning (kurang), Abu-abu (tidak aktif). Filter per afdeling.</p>
+
+<h3>12.2 Dark Mode</h3>
+<p>Toggle 🌙/☀️ di pojok kanan atas. Tersimpan otomatis.</p>
+
+<h3>12.3 Audit Trail</h3>
+<p>Catat aktivitas: perubahan PIN, CRUD data master, export laporan. Filter + export CSV/PDF.</p>
+
+<h3>12.4 Demo Data</h3>
+<p>Panel Admin → Tenants → "Demo Data". Menghasilkan data demo 365 hari untuk testing.</p>
+</div>
+
+<div class="chapter page-break" id="ch13">
+<h2>13. Panel Admin (Super Admin)</h2>
+<p><strong>Akses:</strong> Super Admin — link "Panel Admin" di sidebar.</p>
+
+<h3>13.1 Dashboard Admin</h3>
+<p>Statistik: Total Tenant, Tenant Aktif, Total User, grafik tenant baru, transaksi harian, distribusi paket.</p>
+
+<h3>13.2 Manajemen Tenant</h3>
+<p>Daftar perusahaan, generate Demo Data, hapus tenant.</p>
+</div>
+
+<div class="chapter page-break" id="ch14">
+<h2>14. Pemecahan Masalah</h2>
+
+<table>
+<tr><th>Error</th><th>Penyebab</th><th>Solusi</th></tr>
+<tr><td>Gagal simpan: Duplikat</td><td>Kode/NIK sudah ada</td><td>Gunakan kode berbeda</td></tr>
+<tr><td>Data dipakai relasi lain</td><td>Data memiliki relasi</td><td>Hapus data terkait dulu</td></tr>
+<tr><td>Limit tercapai</td><td>Melebihi batas paket</td><td>Upgrade paket</td></tr>
+<tr><td>PIN invalid</td><td>PIN salah</td><td>Coba lagi / hubungi admin</td></tr>
+<tr><td>Token reset expired</td><td>Link berlaku 30 menit</td><td>Minta link baru</td></tr>
+<tr><td>Email tidak terkirim</td><td>Alamat salah / spam</td><td>Cek folder spam / Riwayat Email</td></tr>
+</table>
+
+</div>
+
+<div class="footer">
+<p>&copy; 2026 <strong>SawitReport</strong> — Semua Hak Dilindungi.</p>
+<p>https://sawitreport.online</p>
+</div>
+
+</div>
+</body>
+</html>
